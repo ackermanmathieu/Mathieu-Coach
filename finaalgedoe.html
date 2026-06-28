@@ -1,0 +1,1017 @@
+<!DOCTYPE html>
+<!-- saved from url=(0064)file:///C:/Users/mathieuackerman/Downloads/mathieu-coach_12.html -->
+<html lang="nl"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mathieu's logboek</title>
+<link rel="stylesheet" href="./finaalgedoe_files/tabler-icons.min.css">
+<script src="./finaalgedoe_files/chart.umd.min.js.downloaden"></script>
+<style>
+  :root {
+    --bg: #1C2128;
+    --surface-1: #242A33;
+    --surface-2: #2C333D;
+    --border: #3A424D;
+    --border-strong: #4B5563;
+    --text-primary: #E8E2D4;
+    --text-secondary: #A8A296;
+    --text-muted: #767168;
+    --accent: #7C9A6E;
+    --accent-bg: rgba(124, 154, 110, 0.12);
+    --care: #B5654A;
+    --care-bg: rgba(181, 101, 74, 0.12);
+    --radius: 10px;
+  }
+  * { box-sizing: border-box; }
+  html, body { overflow-x: hidden; max-width: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    line-height: 1.6;
+    padding: 2rem 1rem 4rem;
+  }
+  .wrap { max-width: 680px; margin: 0 auto; }
+  h1, h2 {
+    font-family: 'Space Grotesk', 'Inter', sans-serif;
+    font-weight: 500;
+    margin: 0;
+  }
+  h1 { font-size: 26px; }
+  h2 { font-size: 19px; margin-bottom: 1rem; }
+  .top-row { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 4px; }
+  .date-label { font-size: 13px; color: var(--text-muted); }
+  .subtitle { color: var(--text-secondary); margin: 0 0 1.5rem; font-size: 14px; }
+  .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 1.5rem; }
+  .stat-card { background: var(--surface-1); border-radius: var(--radius); padding: 1rem; }
+  .stat-label { font-size: 13px; color: var(--text-muted); margin: 0 0 4px; }
+  .stat-value { font-size: 24px; font-weight: 500; margin: 0; }
+  .main-row { display: flex; gap: 20px; margin-bottom: 2rem; }
+  .body-col { flex-shrink: 0; width: 140px; display: flex; flex-direction: column; align-items: center; padding: 4px 0; }
+  .body-zone { fill: var(--surface-2); stroke: var(--border); stroke-width: 1; transition: fill 0.4s ease, stroke 0.4s ease; }
+  .body-zone.active { fill: var(--accent); stroke: var(--accent); }
+  .body-zone.active.care { fill: var(--care); stroke: var(--care); }
+  .body-legend { margin-top: 12px; width: 100%; }
+  .legend-row { display: flex; align-items: center; gap: 6px; font-size: 11px; color: var(--text-muted); margin-bottom: 4px; }
+  .legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .legend-dot.accent { background: var(--accent); }
+  .legend-dot.care { background: var(--care); }
+  .sessions-col { flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+  .session-card {
+    border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem;
+    background: var(--surface-1); transition: border-color 0.2s;
+  }
+  .session-card.done { border-color: var(--accent); }
+  .session-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .session-title { font-weight: 500; margin: 0; font-size: 15px; }
+  .session-sub { font-size: 13px; color: var(--text-secondary); margin: 2px 0 0; }
+  .chev { font-size: 18px; color: var(--text-secondary); transition: transform 0.2s; }
+  .chev.open { transform: rotate(180deg); }
+  .session-body {
+    display: none; margin-top: 14px; padding-top: 14px; border-top: 0.5px solid var(--border);
+  }
+  .session-body.open { display: block; }
+  table { width: 100%; font-size: 13px; border-collapse: collapse; table-layout: fixed; }
+  table .head-row { color: var(--text-muted); }
+  td { padding: 6px 2px; overflow: hidden; }
+  td.right { text-align: right; }
+  .core-row td { color: var(--accent); }
+  .ex-link { color: var(--text-secondary); text-decoration: none; font-size: 12px; display: inline-flex; align-items: center; gap: 2px; }
+  .ex-link:hover { color: var(--text-primary); }
+  .ex-link span.link-label { display: inline; }
+  .note { font-size: 12px; color: var(--text-muted); margin: 10px 0 0; }
+  button {
+    font-family: inherit; font-size: 14px; background: transparent;
+    border: 0.5px solid var(--border-strong); color: var(--text-primary);
+    border-radius: var(--radius); padding: 8px 14px; cursor: pointer;
+    transition: background 0.15s, transform 0.1s;
+  }
+  button:hover { background: var(--surface-2); }
+  button:active { transform: scale(0.98); }
+  .complete-btn { width: 100%; margin-top: 12px; }
+  .complete-btn.done { border-color: var(--accent); color: var(--accent); }
+  .done-date { font-size: 12px; color: var(--accent); white-space: nowrap; }
+  .section { border-top: 0.5px solid var(--border); padding-top: 1.5rem; margin-bottom: 1.5rem; }
+  .nutrition-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .nutrition-card { background: var(--surface-1); border-radius: 12px; padding: 1rem; }
+  .nutrition-card i { font-size: 20px; color: var(--text-secondary); }
+  .nutrition-title { font-weight: 500; font-size: 14px; margin: 8px 0 4px; }
+  .nutrition-text { font-size: 13px; color: var(--text-secondary); margin: 0; }
+  .macro-bar { display: flex; gap: 12px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+  .macro-pill { background: var(--surface-1); border-radius: var(--radius); padding: 8px 14px; font-size: 13px; }
+  .macro-pill b { font-weight: 500; }
+  .day-card {
+    border: 0.5px solid var(--border); border-radius: 12px; padding: 1rem 1.25rem;
+    background: var(--surface-1); margin-bottom: 12px;
+  }
+  .day-head { display: flex; justify-content: space-between; align-items: center; cursor: pointer; }
+  .day-title { font-weight: 500; margin: 0; font-size: 15px; }
+  .day-body { display: none; margin-top: 14px; padding-top: 14px; border-top: 0.5px solid var(--border); }
+  .day-body.open { display: block; }
+  .meal-block { margin-bottom: 14px; }
+  .meal-block:last-child { margin-bottom: 0; }
+  .meal-label { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .meal-text { font-size: 14px; margin: 0; }
+  .meal-macro { font-size: 12px; color: var(--text-secondary); margin: 2px 0 0; }
+  .reset-row { text-align: center; margin-top: 2rem; }
+  .reset-link {
+    font-size: 12px; color: var(--text-muted); background: none; border: none;
+    text-decoration: underline; cursor: pointer; padding: 4px;
+  }
+  .disclaimer {
+    font-size: 12px; color: var(--text-muted); border-top: 0.5px solid var(--border);
+    padding-top: 1.5rem; margin-top: 1.5rem;
+  }
+  .set-inputs { display: flex; gap: 4px; justify-content: flex-end; align-items: center; flex-wrap: nowrap; }
+  .set-inputs input {
+    width: 34px; min-width: 0; font-size: 12px; background: var(--surface-2); border: 0.5px solid var(--border);
+    border-radius: 6px; color: var(--text-primary); padding: 4px 4px; text-align: center;
+  }
+  .set-inputs input:focus { outline: none; border-color: var(--border-strong); }
+  .set-unit { font-size: 10px; color: var(--text-muted); }
+  .ex-row-top td { vertical-align: top; padding-top: 8px; }
+
+  @media (max-width: 420px) {
+    table { font-size: 12px; }
+    .set-inputs input { width: 26px; padding: 3px 2px; font-size: 11px; }
+    .set-unit { font-size: 9px; }
+    .ex-link span.link-label { display: none; }
+    .ex-link { font-size: 14px; }
+    .main-row { gap: 10px; }
+    .body-col { width: 100px; }
+  }
+  .add-row-form { display: flex; gap: 8px; margin-top: 12px; flex-wrap: wrap; }
+  .add-row-form input, .add-row-form select {
+    font-size: 13px; background: var(--surface-2); border: 0.5px solid var(--border);
+    border-radius: var(--radius); color: var(--text-primary); padding: 7px 10px;
+  }
+  .add-row-form input[type="text"] { flex: 1; min-width: 100px; }
+  .add-row-form input[type="number"] { width: 80px; }
+  .activity-item {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 10px 0; border-bottom: 0.5px solid var(--border);
+  }
+  .activity-item:last-child { border-bottom: none; }
+  .activity-main { display: flex; align-items: center; gap: 10px; }
+  .activity-icon {
+    width: 32px; height: 32px; border-radius: 8px; background: var(--surface-2);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+  }
+  .activity-icon i { font-size: 16px; color: var(--text-secondary); }
+  .activity-name { font-size: 14px; margin: 0; }
+  .activity-meta { font-size: 12px; color: var(--text-muted); margin: 0; }
+  .activity-del { background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; }
+  .activity-del:hover { color: var(--care); }
+  .empty-state { font-size: 13px; color: var(--text-muted); padding: 12px 0; text-align: center; }
+  .history-badge {
+    width: 32px; height: 32px; border-radius: 8px; background: var(--accent-bg);
+    display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    font-size: 13px; font-weight: 500; color: var(--accent);
+  }
+  .history-groups { font-size: 14px; margin: 0; }
+  .history-date { font-size: 12px; color: var(--text-muted); margin: 0; }
+  .weight-row { display: flex; gap: 8px; align-items: flex-end; margin-bottom: 1rem; flex-wrap: wrap; }
+  .weight-row input { font-size: 14px; background: var(--surface-2); border: 0.5px solid var(--border); border-radius: var(--radius); color: var(--text-primary); padding: 8px 10px; width: 100px; }
+  .chart-wrap { position: relative; height: 200px; margin-bottom: 1rem; }
+  .bmi-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--surface-1); border-radius: var(--radius); padding: 6px 12px; font-size: 13px; margin-bottom: 1rem; }
+  .alcohol-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; margin-bottom: 1rem; }
+  .alcohol-day { display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .alcohol-day-label { font-size: 11px; color: var(--text-muted); }
+  .alcohol-toggle {
+    width: 36px; height: 36px; border-radius: 50%; border: 0.5px solid var(--border-strong);
+    background: var(--surface-2); cursor: pointer; display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted); font-size: 14px; transition: background 0.15s, border-color 0.15s, color 0.15s;
+  }
+  .alcohol-toggle.clean { background: var(--accent); border-color: var(--accent); color: var(--surface-2); }
+  .alcohol-toggle.drank { background: var(--care); border-color: var(--care); color: var(--surface-2); }
+  .alcohol-toggle.future { opacity: 0.4; cursor: default; }
+  .streak-banner {
+    background: var(--accent-bg); border: 0.5px solid var(--accent); border-radius: var(--radius);
+    padding: 12px 14px; font-size: 13px; color: var(--text-primary); margin-bottom: 0;
+  }
+  .streak-banner i { color: var(--accent); margin-right: 6px; vertical-align: -2px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top-row">
+    <h1>Mathieu's logboek</h1>
+    <span class="date-label" id="today-label">zondag 28 juni</span>
+  </div>
+  <p class="subtitle">2 sessies per week. terug fit, sterke core, minder stijve rug.</p>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <p class="stat-label">deze week</p>
+      <p class="stat-value" id="week-count">0 / 2</p>
+    </div>
+    <div class="stat-card">
+      <p class="stat-label">weken op rij volledig</p>
+      <p class="stat-value" id="streak-count">0</p>
+    </div>
+  </div>
+
+  <div class="main-row">
+    <div class="body-col">
+      <svg viewBox="0 0 140 280" width="100%" style="max-width: 130px;" role="img" aria-label="Lichaamsoverzicht: spiergroepen lichten op naarmate je sessies afwerkt">
+        <path d="M70 14C61 14 54 21 54 30C54 37 57 42 61 45C50 49 42 56 39 68L34 96C33 101 36 105 41 106C45 107 49 104 50 99L54 76C55 71 58 67 62 64L60 100C58 106 57 115 57 126L54 180C53 188 56 195 62 198L64 222C63 228 65 234 70 236C75 234 77 228 76 222L78 198C84 195 87 188 86 180L83 126C83 115 82 106 80 100L78 64C82 67 85 71 86 76L90 99C91 104 95 107 99 106C104 105 107 101 106 96L101 68C98 56 90 49 79 45C83 42 86 37 86 30C86 21 79 14 70 14Z" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1"></path>
+        <circle cx="70" cy="30" r="13" class="body-zone" id="zone-head" fill="var(--surface-2)" stroke="var(--border)" stroke-width="1"></circle>
+        <ellipse cx="56" cy="50" rx="9" ry="8" class="body-zone" id="zone-shoulder-l"></ellipse>
+        <ellipse cx="84" cy="50" rx="9" ry="8" class="body-zone" id="zone-shoulder-r"></ellipse>
+        <path d="M58 50C58 60 60 70 62 78L78 78C80 70 82 60 82 50C77 53 63 53 58 50Z" class="body-zone" id="zone-chest"></path>
+        <rect x="62" y="80" width="6" height="38" rx="2" class="body-zone" id="zone-core-l"></rect>
+        <rect x="72" y="80" width="6" height="38" rx="2" class="body-zone" id="zone-core-r"></rect>
+        <path d="M47 52C44 60 42 68 41 76L39 92C44 92 48 89 49 84L52 60C51 57 49 54 47 52Z" class="body-zone" id="zone-arm-l"></path>
+        <path d="M93 52C96 60 98 68 99 76L101 92C96 92 92 89 91 84L88 60C89 57 91 54 93 52Z" class="body-zone" id="zone-arm-r"></path>
+        <path d="M61 120C59 134 58 150 58 164L60 178C64 180 67 180 70 178L70 164C70 150 70 134 68 120Z" class="body-zone" id="zone-leg-l"></path>
+        <path d="M79 120C81 134 82 150 82 164L80 178C76 180 73 180 70 178L70 164C70 150 70 134 72 120Z" class="body-zone" id="zone-leg-r"></path>
+        <path d="M59 200C58 210 58 220 59 230L61 232C64 233 67 233 69 232L69 200Z" class="body-zone" id="zone-calf-l"></path>
+        <path d="M81 200C82 210 82 220 81 230L79 232C76 233 73 233 71 232L71 200Z" class="body-zone" id="zone-calf-r"></path>
+      </svg>
+      <div class="body-legend">
+        <div class="legend-row"><span class="legend-dot accent"></span>getraind</div>
+        <div class="legend-row"><span class="legend-dot care"></span>rug, focus</div>
+      </div>
+    </div>
+
+    <div class="sessions-col">
+      <div class="session-card" data-session="1" id="card-1">
+        <div class="session-head" onclick="toggleSession(1)">
+          <div>
+            <p class="session-title" id="title-1">Sessie 1: borst + triceps</p>
+            <p class="session-sub" id="sub-1">45-50 min, basic fit</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="done-date" id="date-1"></span>
+            <i class="ti ti-chevron-down chev" id="chev-1" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="session-body" id="body-1">
+          <table id="table-1"><tbody><tr class="head-row"><td>oefening</td><td class="right">reeksen x reps</td><td class="right">jouw set</td><td class="right">uitleg</td></tr><tr class="ex-row-top"><td>chest press (machine)</td><td class="right">3 x 10-12</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="chest-press" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="chest-press" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=chest+press+machine+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr><tr class="ex-row-top"><td>chest fly (machine)</td><td class="right">3 x 12</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="chest-fly" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="chest-fly" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=chest+fly+machine+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr><tr class="ex-row-top"><td>triceps pushdown</td><td class="right">3 x 10-12</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="triceps-pushdown" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="triceps-pushdown" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=triceps+pushdown+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr></tbody></table>
+          <p class="note">vul gewicht en reps in na je laatste reeks. dat helpt je opvolgen of je vooruitgang maakt.</p>
+          <button class="complete-btn" id="btn-1" onclick="completeSession(1)"><i class="ti ti-check" style="font-size:16px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>Sessie afgewerkt</button>
+        </div>
+      </div>
+
+      <div class="session-card" data-session="2" id="card-2">
+        <div class="session-head" onclick="toggleSession(2)">
+          <div>
+            <p class="session-title" id="title-2">Sessie 2: rug + biceps</p>
+            <p class="session-sub" id="sub-2">45 min, basic fit</p>
+          </div>
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span class="done-date" id="date-2"></span>
+            <i class="ti ti-chevron-down chev" id="chev-2" aria-hidden="true"></i>
+          </div>
+        </div>
+        <div class="session-body" id="body-2">
+          <table id="table-2"><tbody><tr class="head-row"><td>oefening</td><td class="right">reeksen x reps</td><td class="right">jouw set</td><td class="right">uitleg</td></tr><tr class="ex-row-top"><td>lat pulldown</td><td class="right">3 x 10-12</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="lat-pulldown" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="lat-pulldown" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=lat+pulldown+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr><tr class="ex-row-top"><td>cable row, rechte rug</td><td class="right">3 x 10-12</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="cable-row" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="cable-row" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=seated+cable+row+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr><tr class="ex-row-top"><td>back extension</td><td class="right">3 x 12-15</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="back-extension" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="back-extension" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=back+extension+toestel+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr><tr class="ex-row-top"><td>bicep curl (kabel of dumbbell)</td><td class="right">3 x 10-12</td><td class="right"><div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="bicep-curl" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="bicep-curl" data-field="reps"><span class="set-unit">x</span></div></td><td class="right"><a class="ex-link" href="https://www.google.com/search?q=bicep+curl+correcte+uitvoering+video&amp;tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr></tbody></table>
+          <p class="note">vul gewicht en reps in na je laatste reeks.</p>
+          <button class="complete-btn" id="btn-2" onclick="completeSession(2)"><i class="ti ti-check" style="font-size:16px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>Sessie afgewerkt</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="subtitle" id="week-program-label" style="margin-top: -1.5rem; margin-bottom: 1.5rem;">programweek 1 van 4 (rotatie vanaf 29 juni 2026)</p>
+
+  <div class="section">
+    <h2>Trainingsgeschiedenis</h2>
+    <p class="subtitle" style="margin-bottom: 1rem;">alle afgewerkte sessies, nieuwste eerst.</p>
+    <div id="history-list"><p class="empty-state">nog geen sessie afgewerkt</p></div>
+  </div>
+
+  <div class="section">
+    <h2>Extra activiteit</h2>
+    <p class="subtitle" style="margin-bottom: 1rem;">los van je 2 vaste sessies. fietsen, wandelen, lopen, zwemmen, of wat je ook extra deed.</p>
+    <div id="activity-list"><p class="empty-state">nog geen extra activiteit gelogd</p></div>
+    <div class="add-row-form">
+      <select id="activity-type">
+        <option value="fietsen">fietsen</option>
+        <option value="wandelen">wandelen</option>
+        <option value="lopen">lopen</option>
+        <option value="zwemmen">zwemmen</option>
+        <option value="andere">andere</option>
+      </select>
+      <input type="number" id="activity-duration" placeholder="minuten" min="1">
+      <button onclick="addActivity()"><i class="ti ti-plus" style="font-size:14px; vertical-align:-2px; margin-right:2px;" aria-hidden="true"></i>toevoegen</button>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Gewicht en BMI</h2>
+    <p class="subtitle" style="margin-bottom: 1rem;">BMI is een ruwe richtlijn, geen echte gezondheidsmeting — het houdt geen rekening met spiermassa. bij spieropbouw kan je gewicht en BMI stijgen terwijl je net gezonder wordt.</p>
+    <div class="weight-row">
+      <div>
+        <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">gewicht (kg)</label>
+        <input type="number" id="weight-input" min="0" step="0.1" placeholder="98">
+      </div>
+      <button onclick="addWeight()">log gewicht vandaag</button>
+    </div>
+    <div class="bmi-pill" id="bmi-pill" style="display: none;">
+      <i class="ti ti-activity" style="font-size:14px;" aria-hidden="true"></i>
+      <span id="bmi-text"></span>
+    </div>
+    <div class="chart-wrap">
+      <canvas id="weight-chart" width="1020" height="300" style="display: block; box-sizing: border-box; height: 200px; width: 680px;"></canvas>
+    </div>
+  </div>
+
+  <div class="section">
+    <h2>Alcohol</h2>
+    <p class="subtitle" style="margin-bottom: 1rem;">tik een dag aan om bij te houden of je gedronken hebt. groen is alcoholvrij.</p>
+    <div id="alcohol-banner-wrap"></div>
+    <div class="alcohol-grid" id="alcohol-grid" style="margin-top: 1rem;"><div class="alcohol-day"><span class="alcohol-day-label">ma</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-22&#39;)" aria-label="2026-06-22"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">di</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-23&#39;)" aria-label="2026-06-23"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">wo</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-24&#39;)" aria-label="2026-06-24"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">do</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-25&#39;)" aria-label="2026-06-25"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">vr</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-26&#39;)" aria-label="2026-06-26"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">za</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-27&#39;)" aria-label="2026-06-27"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">zo</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;alcohol&#39;,&#39;2026-06-28&#39;)" aria-label="2026-06-28"><i class="ti ti-minus" aria-hidden="true"></i></button></div></div>
+  </div>
+
+  <div class="section">
+    <h2>Roken</h2>
+    <p class="subtitle" style="margin-bottom: 1rem;">tik een dag aan. groen is rookvrij.</p>
+    <div id="smoking-banner-wrap"></div>
+    <div class="alcohol-grid" id="smoking-grid" style="margin-top: 1rem;"><div class="alcohol-day"><span class="alcohol-day-label">ma</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-22&#39;)" aria-label="2026-06-22"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">di</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-23&#39;)" aria-label="2026-06-23"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">wo</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-24&#39;)" aria-label="2026-06-24"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">do</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-25&#39;)" aria-label="2026-06-25"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">vr</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-26&#39;)" aria-label="2026-06-26"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">za</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-27&#39;)" aria-label="2026-06-27"><i class="ti ti-minus" aria-hidden="true"></i></button></div><div class="alcohol-day"><span class="alcohol-day-label">zo</span><button class="alcohol-toggle" onclick="toggleHabit(&#39;smoking&#39;,&#39;2026-06-28&#39;)" aria-label="2026-06-28"><i class="ti ti-minus" aria-hidden="true"></i></button></div></div>
+  </div>
+
+  <div class="section">
+    <h2>Voedingsschema, maandag t/m vrijdagmiddag</h2>
+    <p class="subtitle" style="margin-bottom: 1rem;">richtwaarden voor spieropbouw, gebaseerd op 190 cm / 98 kg / licht actief. dit is een schatting volgens een standaardformule, geen exacte meting.</p>
+    <div class="macro-bar">
+      <div class="macro-pill"><b>~2850</b> kcal/dag</div>
+      <div class="macro-pill"><b>~175g</b> eiwit/dag</div>
+      <div class="macro-pill"><b>~90g</b> vet/dag</div>
+      <div class="macro-pill"><b>~310g</b> koolhydraten/dag</div>
+    </div>
+
+    <div class="day-card" id="day-card-ma">
+      <div class="day-head" onclick="toggleDay(&#39;ma&#39;)">
+        <p class="day-title">Maandag</p>
+        <i class="ti ti-chevron-down chev" id="day-chev-ma" aria-hidden="true"></i>
+      </div>
+      <div class="day-body" id="day-body-ma">
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun" style="font-size:14px;" aria-hidden="true"></i>ochtend</p>
+          <p class="meal-text">4 eieren roerei + 2 sneetjes volkoren brood + avocado</p>
+          <p class="meal-macro">~640 kcal, ~32g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun-high" style="font-size:14px;" aria-hidden="true"></i>middag</p>
+          <p class="meal-text">kipfilet (200g) + volkoren rijst (100g rauw) + groenten naar keuze</p>
+          <p class="meal-macro">~720 kcal, ~55g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-moon" style="font-size:14px;" aria-hidden="true"></i>avond</p>
+          <p class="meal-text">zalmfilet (180g) + zoete aardappel + broccoli, olijfolie</p>
+          <p class="meal-macro">~680 kcal, ~42g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-apple" style="font-size:14px;" aria-hidden="true"></i>tussendoor</p>
+          <p class="meal-text">kwark (250g) met handvol noten, of een proteine shake</p>
+          <p class="meal-macro">~400 kcal, ~38g eiwit</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day-card-di">
+      <div class="day-head" onclick="toggleDay(&#39;di&#39;)">
+        <p class="day-title">Dinsdag</p>
+        <i class="ti ti-chevron-down chev" id="day-chev-di" aria-hidden="true"></i>
+      </div>
+      <div class="day-body" id="day-body-di">
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun" style="font-size:14px;" aria-hidden="true"></i>ochtend</p>
+          <p class="meal-text">griekse yoghurt (300g) met havermout, banaan en honing</p>
+          <p class="meal-macro">~580 kcal, ~30g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun-high" style="font-size:14px;" aria-hidden="true"></i>middag</p>
+          <p class="meal-text">wrap met tonijn, mais, paprika en lichte mayo, side salade</p>
+          <p class="meal-macro">~650 kcal, ~40g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-moon" style="font-size:14px;" aria-hidden="true"></i>avond</p>
+          <p class="meal-text">runds gehakt (200g) bolognese met volkoren pasta</p>
+          <p class="meal-macro">~780 kcal, ~48g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-apple" style="font-size:14px;" aria-hidden="true"></i>tussendoor</p>
+          <p class="meal-text">cottage cheese (200g) met komkommer, of proteine shake</p>
+          <p class="meal-macro">~350 kcal, ~30g eiwit</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day-card-wo">
+      <div class="day-head" onclick="toggleDay(&#39;wo&#39;)">
+        <p class="day-title">Woensdag</p>
+        <i class="ti ti-chevron-down chev" id="day-chev-wo" aria-hidden="true"></i>
+      </div>
+      <div class="day-body" id="day-body-wo">
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun" style="font-size:14px;" aria-hidden="true"></i>ochtend</p>
+          <p class="meal-text">3 eieren + spek (mager) + 2 sneetjes volkoren brood</p>
+          <p class="meal-macro">~600 kcal, ~34g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun-high" style="font-size:14px;" aria-hidden="true"></i>middag</p>
+          <p class="meal-text">kalkoenfilet (200g) + quinoa (100g rauw) + groenten naar keuze</p>
+          <p class="meal-macro">~700 kcal, ~52g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-moon" style="font-size:14px;" aria-hidden="true"></i>avond</p>
+          <p class="meal-text">witvis (200g) + aardappelen + groene groenten, olijfolie</p>
+          <p class="meal-macro">~650 kcal, ~44g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-apple" style="font-size:14px;" aria-hidden="true"></i>tussendoor</p>
+          <p class="meal-text">kwark (250g) met fruit, of proteine shake</p>
+          <p class="meal-macro">~400 kcal, ~38g eiwit</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day-card-do">
+      <div class="day-head" onclick="toggleDay(&#39;do&#39;)">
+        <p class="day-title">Donderdag</p>
+        <i class="ti ti-chevron-down chev" id="day-chev-do" aria-hidden="true"></i>
+      </div>
+      <div class="day-body" id="day-body-do">
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun" style="font-size:14px;" aria-hidden="true"></i>ochtend</p>
+          <p class="meal-text">proteine shake + 2 sneetjes volkoren brood met pindakaas</p>
+          <p class="meal-macro">~600 kcal, ~40g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun-high" style="font-size:14px;" aria-hidden="true"></i>middag</p>
+          <p class="meal-text">kipfilet (200g) wrap met groenten en hummus</p>
+          <p class="meal-macro">~680 kcal, ~50g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-moon" style="font-size:14px;" aria-hidden="true"></i>avond</p>
+          <p class="meal-text">biefstuk (180g) + zoete aardappelfrietjes + salade</p>
+          <p class="meal-macro">~720 kcal, ~46g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-apple" style="font-size:14px;" aria-hidden="true"></i>tussendoor</p>
+          <p class="meal-text">griekse yoghurt (250g) met noten, of proteine shake</p>
+          <p class="meal-macro">~380 kcal, ~32g eiwit</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="day-card" id="day-card-vr">
+      <div class="day-head" onclick="toggleDay(&#39;vr&#39;)">
+        <p class="day-title">Vrijdag (tot middag)</p>
+        <i class="ti ti-chevron-down chev" id="day-chev-vr" aria-hidden="true"></i>
+      </div>
+      <div class="day-body" id="day-body-vr">
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun" style="font-size:14px;" aria-hidden="true"></i>ochtend</p>
+          <p class="meal-text">omelet (4 eieren) met spinazie en feta, 1 sneetje brood</p>
+          <p class="meal-macro">~580 kcal, ~36g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-sun-high" style="font-size:14px;" aria-hidden="true"></i>middag</p>
+          <p class="meal-text">kipfilet (200g) + volkoren rijst + roergebakken groenten</p>
+          <p class="meal-macro">~700 kcal, ~52g eiwit</p>
+        </div>
+        <div class="meal-block">
+          <p class="meal-label"><i class="ti ti-apple" style="font-size:14px;" aria-hidden="true"></i>tussendoor</p>
+          <p class="meal-text">kwark (250g) met fruit, of proteine shake</p>
+          <p class="meal-macro">~400 kcal, ~38g eiwit</p>
+        </div>
+        <p class="note" style="margin-top: 8px;">vanaf vrijdagavond geen vast schema. blijf bij dezelfde principes: eiwit bij elke maaltijd, groenten erbij, water als standaard.</p>
+      </div>
+    </div>
+
+    <p class="note">portiegroottes zijn richtwaarden, niet exact. vervang gerust gelijkaardige eiwitbronnen (kip, kalkoen, vis, rund, eieren, kwark) of koolhydraatbronnen (rijst, aardappel, quinoa, brood) naar smaak — de verhoudingen blijven dan ongeveer gelijk.</p>
+  </div>
+
+  <div class="section">
+    <h2>Voeding, in grote lijnen</h2>
+    <div class="nutrition-grid">
+      <div class="nutrition-card">
+        <i class="ti ti-meat" aria-hidden="true"></i>
+        <p class="nutrition-title">eiwit bij elke maaltijd</p>
+        <p class="nutrition-text">eieren, kip, vis, kwark, peulvruchten. helpt herstel en houdt je langer verzadigd.</p>
+      </div>
+      <div class="nutrition-card">
+        <i class="ti ti-glass-full" aria-hidden="true"></i>
+        <p class="nutrition-title">alcohol afbouwen, niet schrappen</p>
+        <p class="nutrition-text">stel 2-3 alcoholvrije dagen per week in. duurzamer dan in een keer stoppen.</p>
+      </div>
+      <div class="nutrition-card">
+        <i class="ti ti-salad" aria-hidden="true"></i>
+        <p class="nutrition-title">groenten vullen het bord</p>
+        <p class="nutrition-text">minstens de helft van je bord, bij het avondeten zeker.</p>
+      </div>
+      <div class="nutrition-card">
+        <i class="ti ti-droplet" aria-hidden="true"></i>
+        <p class="nutrition-title">water als standaard</p>
+        <p class="nutrition-text">fles binnen handbereik op je bureau, frisdrank als uitzondering.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="reset-row">
+    <button class="reset-link" onclick="resetWeek()">reset deze week</button>
+  </div>
+
+  <p class="disclaimer">
+    dit logboek is een algemeen opbouwschema, geen medisch advies. bij aanhoudende of scherpe rugpijn: raadpleeg een kinesist of arts voor je verdergaat. je voortgang wordt lokaal in deze browser bewaard.
+  </p>
+
+</div>
+
+<script>
+  var STORAGE_KEY = 'mathieu-coach-state-v1';
+
+  function loadState() {
+    try {
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if (raw) {
+        var parsed = JSON.parse(raw);
+        parsed.activities = parsed.activities || [];
+        parsed.weights = parsed.weights || [];
+        parsed.alcohol = parsed.alcohol || {};
+        parsed.smoking = parsed.smoking || {};
+        parsed.sets = parsed.sets || {};
+        parsed.completedDates = parsed.completedDates || {};
+        parsed.sessionLog = parsed.sessionLog || [];
+        return parsed;
+      }
+    } catch (e) {}
+    return { weekKey: currentWeekKey(), completed: {}, streak: 0, activities: [], weights: [], alcohol: {}, smoking: {}, sets: {}, completedDates: {}, sessionLog: [] };
+  }
+
+  function saveState() {
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); } catch (e) {}
+  }
+
+  function currentWeekKey() {
+    var d = new Date();
+    var onejan = new Date(d.getFullYear(), 0, 1);
+    var week = Math.ceil((((d - onejan) / 86400000) + onejan.getDay() + 1) / 7);
+    return d.getFullYear() + '-W' + week;
+  }
+
+  var state = loadState();
+
+  var thisWeek = currentWeekKey();
+  if (state.weekKey !== thisWeek) {
+    if (Object.keys(state.completed || {}).length >= 2) {
+      state.streak = (state.streak || 0) + 1;
+    } else {
+      state.streak = 0;
+    }
+    state.weekKey = thisWeek;
+    state.completed = {};
+    saveState();
+  }
+
+  var PROGRAM_START = new Date(2026, 5, 29);
+
+  var EXERCISES = {
+    'borst': [
+      { id: 'chest-press', name: 'chest press (machine)', sets: '3 x 10-12', q: 'chest+press+machine+correcte+uitvoering+video' },
+      { id: 'chest-fly', name: 'chest fly (machine)', sets: '3 x 12', q: 'chest+fly+machine+correcte+uitvoering+video' }
+    ],
+    'rug': [
+      { id: 'lat-pulldown', name: 'lat pulldown', sets: '3 x 10-12', q: 'lat+pulldown+correcte+uitvoering+video' },
+      { id: 'cable-row', name: 'cable row, rechte rug', sets: '3 x 10-12', q: 'seated+cable+row+correcte+uitvoering+video' },
+      { id: 'back-extension', name: 'back extension', sets: '3 x 12-15', q: 'back+extension+toestel+correcte+uitvoering+video' }
+    ],
+    'schouders': [
+      { id: 'shoulder-press', name: 'shoulder press (machine)', sets: '3 x 10-12', q: 'shoulder+press+machine+correcte+uitvoering+video' },
+      { id: 'lateral-raise', name: 'lateral raise', sets: '3 x 12-15', q: 'lateral+raise+correcte+uitvoering+video' }
+    ],
+    'biceps': [
+      { id: 'bicep-curl', name: 'bicep curl (kabel of dumbbell)', sets: '3 x 10-12', q: 'bicep+curl+correcte+uitvoering+video' }
+    ],
+    'triceps': [
+      { id: 'triceps-pushdown', name: 'triceps pushdown', sets: '3 x 10-12', q: 'triceps+pushdown+correcte+uitvoering+video' }
+    ],
+    'benen': [
+      { id: 'leg-press', name: 'leg press', sets: '3 x 12', q: 'leg+press+correcte+uitvoering+video' },
+      { id: 'leg-curl', name: 'leg curl (machine)', sets: '3 x 12', q: 'leg+curl+machine+correcte+uitvoering+video' }
+    ],
+    'armen': [
+      { id: 'bicep-curl', name: 'bicep curl (kabel of dumbbell)', sets: '3 x 10-12', q: 'bicep+curl+correcte+uitvoering+video' },
+      { id: 'triceps-pushdown', name: 'triceps pushdown', sets: '3 x 10-12', q: 'triceps+pushdown+correcte+uitvoering+video' }
+    ],
+    'core': [
+      { id: 'plank', name: 'plank', sets: '3 x 30-40s', q: 'plank+correcte+houding+video', timeBased: true },
+      { id: 'dead-bug', name: 'dead bug', sets: '3 x 10 per kant', q: 'dead+bug+oefening+video', timeBased: true },
+      { id: 'bird-dog', name: 'bird dog', sets: '3 x 10 per kant', q: 'bird+dog+oefening+correcte+uitvoering+video', timeBased: true },
+      { id: 'side-plank', name: 'side plank', sets: '2 x 20-30s per kant', q: 'side+plank+correcte+houding+video', timeBased: true }
+    ]
+  };
+
+  var ZONE_MAP = {
+    'borst': ['chest'], 'rug': ['core-l', 'core-r'], 'schouders': ['shoulder-l', 'shoulder-r'],
+    'biceps': ['arm-l', 'arm-r'], 'triceps': ['arm-l', 'arm-r'], 'benen': ['leg-l', 'leg-r'],
+    'armen': ['arm-l', 'arm-r'], 'core': ['core-l', 'core-r']
+  };
+
+  var WEEK_PROGRAM = [
+    { s1: ['borst', 'triceps'], s2: ['rug', 'biceps'] },
+    { s1: ['benen', 'core'], s2: ['schouders', 'core'] },
+    { s1: ['borst', 'rug'], s2: ['benen', 'armen'] },
+    { s1: ['schouders', 'triceps'], s2: ['rug', 'core'] }
+  ];
+
+  function getProgramWeekIndex() {
+    var now = new Date();
+    var diffDays = Math.floor((now - PROGRAM_START) / 86400000);
+    var weekNum = Math.floor(diffDays / 7);
+    if (weekNum < 0) weekNum = 0;
+    return weekNum % WEEK_PROGRAM.length;
+  }
+
+  function getProgramWeekLabel() {
+    var now = new Date();
+    var diffDays = Math.floor((now - PROGRAM_START) / 86400000);
+    var weekNum = Math.floor(diffDays / 7) + 1;
+    if (weekNum < 1) weekNum = 1;
+    return weekNum;
+  }
+
+  function buildSessionExercises(muscleGroups) {
+    var list = [];
+    muscleGroups.forEach(function(mg) {
+      (EXERCISES[mg] || []).forEach(function(ex) {
+        if (!list.find(function(e) { return e.id === ex.id; })) list.push(ex);
+      });
+    });
+    return list;
+  }
+
+  function exerciseRowHtml(ex) {
+    var inputCell = ex.timeBased
+      ? ''
+      : '<div class="set-inputs"><input type="number" min="0" step="0.5" placeholder="0" data-ex="' + ex.id + '" data-field="weight"><span class="set-unit">kg</span><input type="number" min="0" step="1" placeholder="0" data-ex="' + ex.id + '" data-field="reps"><span class="set-unit">x</span></div>';
+    var rowClass = ex.timeBased ? ' class="core-row"' : ' class="ex-row-top"';
+    return '<tr' + rowClass + '><td>' + ex.name + '</td><td class="right">' + ex.sets + '</td><td class="right">' + inputCell + '</td>' +
+      '<td class="right"><a class="ex-link" href="https://www.google.com/search?q=' + ex.q + '&tbm=vid" target="_blank" rel="noopener"><span class="link-label">video</span><i class="ti ti-external-link" style="font-size:13px;" aria-hidden="true"></i></a></td></tr>';
+  }
+
+  function renderSessionTable(n, muscleGroups) {
+    var exercises = buildSessionExercises(muscleGroups);
+    var table = document.getElementById('table-' + n);
+    var rows = '<tr class="head-row"><td>oefening</td><td class="right">reeksen x reps</td><td class="right">jouw set</td><td class="right">uitleg</td></tr>';
+    exercises.forEach(function(ex) { rows += exerciseRowHtml(ex); });
+    table.innerHTML = rows;
+    document.getElementById('title-' + n).textContent = 'Sessie ' + n + ': ' + muscleGroups.join(' + ');
+
+    document.querySelectorAll('#table-' + n + ' input[data-ex]').forEach(function(input) {
+      var ex = input.getAttribute('data-ex');
+      var field = input.getAttribute('data-field');
+      var todayKey = dateKey();
+      var history = state.sets[ex];
+      if (!history) return;
+      var entry = history.find(function(e) { return e.date === todayKey; });
+      if (entry && entry[field] !== undefined) input.value = entry[field];
+    });
+  }
+
+  function render() {
+    var count = Object.keys(state.completed).length;
+    document.getElementById('week-count').textContent = count + ' / 2';
+    document.getElementById('streak-count').textContent = state.streak || 0;
+
+    var weekIdx = getProgramWeekIndex();
+    var program = WEEK_PROGRAM[weekIdx];
+    document.getElementById('week-program-label').textContent =
+      'programweek ' + getProgramWeekLabel() + ' van ' + WEEK_PROGRAM.length + ' (rotatie vanaf 29 juni 2026)';
+
+    renderSessionTable(1, program.s1);
+    renderSessionTable(2, program.s2);
+
+    document.querySelectorAll('.body-zone').forEach(function(el) {
+      el.classList.remove('active', 'care');
+    });
+
+    [1, 2].forEach(function(n) {
+      var done = !!state.completed[n];
+      var btn = document.getElementById('btn-' + n);
+      var card = document.getElementById('card-' + n);
+      var dateBadge = document.getElementById('date-' + n);
+      var groups = n === 1 ? program.s1 : program.s2;
+      if (done) {
+        btn.classList.add('done');
+        btn.innerHTML = '<i class="ti ti-check" style="font-size:16px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>Voltooid';
+        card.classList.add('done');
+        var doneDate = (state.completedDates || {})[n];
+        dateBadge.textContent = doneDate ? formatShortDate(doneDate) : '';
+        groups.forEach(function(mg) {
+          var zones = ZONE_MAP[mg] || [];
+          var isCare = (mg === 'core' || mg === 'rug');
+          zones.forEach(function(z) {
+            var el = document.getElementById('zone-' + z);
+            if (el) el.classList.add('active', isCare ? 'care' : '');
+          });
+        });
+      } else {
+        btn.classList.remove('done');
+        btn.innerHTML = '<i class="ti ti-check" style="font-size:16px;vertical-align:-2px;margin-right:4px;" aria-hidden="true"></i>Sessie afgewerkt';
+        card.classList.remove('done');
+        dateBadge.textContent = '';
+      }
+    });
+  }
+
+  function toggleSession(n) {
+    var body = document.getElementById('body-' + n);
+    var chev = document.getElementById('chev-' + n);
+    var open = body.classList.contains('open');
+    body.classList.toggle('open', !open);
+    chev.classList.toggle('open', !open);
+  }
+
+  function toggleDay(key) {
+    var body = document.getElementById('day-body-' + key);
+    var chev = document.getElementById('day-chev-' + key);
+    var open = body.classList.contains('open');
+    body.classList.toggle('open', !open);
+    chev.classList.toggle('open', !open);
+  }
+
+  function dateKey(d) {
+    d = d || new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  function formatShortDate(key) {
+    var parts = key.split('-');
+    var d = new Date(parseInt(parts[0], 10), parseInt(parts[1], 10) - 1, parseInt(parts[2], 10));
+    return d.toLocaleDateString('nl-BE', { weekday: 'short', day: 'numeric', month: 'short' });
+  }
+
+  function completeSession(n) {
+    if (state.completed[n]) return;
+    state.completed[n] = true;
+    state.completedDates = state.completedDates || {};
+    var today = dateKey();
+    state.completedDates[n] = today;
+
+    var weekIdx = getProgramWeekIndex();
+    var program = WEEK_PROGRAM[weekIdx];
+    var groups = n === 1 ? program.s1 : program.s2;
+    state.sessionLog = state.sessionLog || [];
+    state.sessionLog.push({ date: today, session: n, groups: groups });
+
+    var card = document.getElementById('card-' + n);
+    card.querySelectorAll('input[data-ex]').forEach(function(input) {
+      var ex = input.getAttribute('data-ex');
+      var field = input.getAttribute('data-field');
+      var val = parseFloat(input.value);
+      if (!val) return;
+      state.sets[ex] = state.sets[ex] || [];
+      var entry = state.sets[ex].find(function(e) { return e.date === today; });
+      if (!entry) {
+        entry = { date: today };
+        state.sets[ex].push(entry);
+      }
+      entry[field] = val;
+    });
+    saveState();
+    render();
+    renderHistory();
+  }
+
+  function resetWeek() {
+    state.completed = {};
+    state.completedDates = {};
+    saveState();
+    render();
+  }
+
+  var ACTIVITY_ICONS = { fietsen: 'ti-bike', wandelen: 'ti-walk', lopen: 'ti-run', zwemmen: 'ti-swimming', andere: 'ti-stretching' };
+
+  function addActivity() {
+    var type = document.getElementById('activity-type').value;
+    var duration = parseInt(document.getElementById('activity-duration').value, 10);
+    if (!duration || duration <= 0) return;
+    state.activities.push({ type: type, duration: duration, date: dateKey() });
+    document.getElementById('activity-duration').value = '';
+    saveState();
+    renderActivities();
+  }
+
+  function removeActivity(idx) {
+    state.activities.splice(idx, 1);
+    saveState();
+    renderActivities();
+  }
+
+  function renderHistory() {
+    var list = document.getElementById('history-list');
+    var sorted = (state.sessionLog || []).slice().sort(function(a, b) { return b.date.localeCompare(a.date); }).slice(0, 20);
+    if (sorted.length === 0) {
+      list.innerHTML = '<p class="empty-state">nog geen sessie afgewerkt</p>';
+      return;
+    }
+    list.innerHTML = sorted.map(function(entry) {
+      return '<div class="activity-item">' +
+        '<div class="activity-main">' +
+          '<div class="history-badge">S' + entry.session + '</div>' +
+          '<div><p class="history-groups">' + entry.groups.join(' + ') + '</p><p class="history-date">' + formatShortDate(entry.date) + '</p></div>' +
+        '</div>' +
+      '</div>';
+    }).join('');
+  }
+
+  function renderActivities() {
+    var list = document.getElementById('activity-list');
+    var sorted = state.activities.map(function(a, i) { return { a: a, i: i }; })
+      .sort(function(x, y) { return y.a.date.localeCompare(x.a.date); })
+      .slice(0, 10);
+    if (sorted.length === 0) {
+      list.innerHTML = '<p class="empty-state">nog geen extra activiteit gelogd</p>';
+      return;
+    }
+    list.innerHTML = sorted.map(function(item) {
+      var a = item.a;
+      var icon = ACTIVITY_ICONS[a.type] || 'ti-stretching';
+      return '<div class="activity-item">' +
+        '<div class="activity-main">' +
+          '<div class="activity-icon"><i class="ti ' + icon + '" aria-hidden="true"></i></div>' +
+          '<div><p class="activity-name">' + a.type + '</p><p class="activity-meta">' + a.date + ', ' + a.duration + ' min</p></div>' +
+        '</div>' +
+        '<button class="activity-del" onclick="removeActivity(' + item.i + ')" aria-label="verwijder"><i class="ti ti-x" style="font-size:14px;" aria-hidden="true"></i></button>' +
+      '</div>';
+    }).join('');
+  }
+
+  var HEIGHT_M = 1.90;
+  var weightChart = null;
+
+  function addWeight() {
+    var val = parseFloat(document.getElementById('weight-input').value);
+    if (!val || val <= 0) return;
+    var today = dateKey();
+    var existing = state.weights.find(function(w) { return w.date === today; });
+    if (existing) { existing.weight = val; } else { state.weights.push({ date: today, weight: val }); }
+    state.weights.sort(function(a, b) { return a.date.localeCompare(b.date); });
+    document.getElementById('weight-input').value = '';
+    saveState();
+    renderWeight();
+  }
+
+  function renderWeight() {
+    var pill = document.getElementById('bmi-pill');
+    var text = document.getElementById('bmi-text');
+    if (state.weights.length > 0) {
+      var latest = state.weights[state.weights.length - 1];
+      var bmi = latest.weight / (HEIGHT_M * HEIGHT_M);
+      pill.style.display = 'inline-flex';
+      text.textContent = 'laatste: ' + latest.weight + ' kg, BMI ' + bmi.toFixed(1) + ' (schatting, op 190 cm)';
+    } else {
+      pill.style.display = 'none';
+    }
+
+    var ctx = document.getElementById('weight-chart');
+    var labels = state.weights.map(function(w) { return w.date.slice(5); });
+    var data = state.weights.map(function(w) { return w.weight; });
+    if (weightChart) weightChart.destroy();
+    if (!window.Chart) return;
+    weightChart = new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [{
+          data: data,
+          borderColor: '#7C9A6E',
+          backgroundColor: 'rgba(124,154,110,0.12)',
+          fill: true,
+          tension: 0.3,
+          pointRadius: 3,
+          pointBackgroundColor: '#7C9A6E'
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          x: { ticks: { color: '#767168', font: { size: 11 } }, grid: { display: false } },
+          y: { ticks: { color: '#767168', font: { size: 11 } }, grid: { color: '#3A424D' } }
+        }
+      }
+    });
+  }
+
+  var WEEKDAY_LABELS = ['ma', 'di', 'wo', 'do', 'vr', 'za', 'zo'];
+
+  function getWeekDates() {
+    var d = new Date();
+    var dow = (d.getDay() + 6) % 7;
+    var monday = new Date(d);
+    monday.setDate(d.getDate() - dow);
+    var dates = [];
+    for (var i = 0; i < 7; i++) {
+      var dd = new Date(monday);
+      dd.setDate(monday.getDate() + i);
+      dates.push(dateKey(dd));
+    }
+    return dates;
+  }
+
+  function toggleHabit(type, key) {
+    var store = state[type];
+    var current = store[key];
+    if (current === undefined) store[key] = false;
+    else if (current === false) store[key] = true;
+    else delete store[key];
+    saveState();
+    if (type === 'alcohol') renderAlcohol(); else renderSmoking();
+  }
+
+  function getCurrentCleanStreak(type) {
+    var store = state[type];
+    var streak = 0;
+    var d = new Date();
+    while (true) {
+      var key = dateKey(d);
+      if (store[key] === false) {
+        streak++;
+        d.setDate(d.getDate() - 1);
+      } else {
+        break;
+      }
+    }
+    return streak;
+  }
+
+  var SMOKING_MILESTONES = [
+    { days: 1, text: '24 uur rookvrij. alle koolmonoxide is uit je lichaam en je bloeddruk is genormaliseerd.' },
+    { days: 2, text: '48 uur rookvrij. geen nicotine meer in je lichaam, je reuk- en smaakvermogen begint te verbeteren.' },
+    { days: 3, text: '3 dagen rookvrij. ademen gaat makkelijker, je luchtwegen ontspannen en je energie neemt toe.' },
+    { days: 7, text: '1 week rookvrij. knap volgehouden — de zwaarste fysieke ontwenning is meestal nu voorbij.' },
+    { days: 14, text: '2 weken rookvrij. je bloedsomloop verbetert, bewegen en ademen voelt makkelijker.' },
+    { days: 30, text: '1 maand rookvrij. je conditie is merkbaar beter en een rokershoestje begint te verdwijnen.' }
+  ];
+
+  var ALCOHOL_MILESTONES = [
+    { days: 3, text: '3 dagen op rij alcoholvrij. goed volgehouden, dit helpt je herstel en energie.' },
+    { days: 7, text: '1 week alcoholvrij. je slaap en herstel profiteren hier meteen van.' },
+    { days: 14, text: '2 weken alcoholvrij. knap volgehouden, dit is een echte gewoonteverandering.' },
+    { days: 30, text: '1 maand alcoholvrij. een sterke prestatie die je lichaam tijd geeft om te herstellen.' }
+  ];
+
+  function getMilestoneText(type, streak) {
+    var list = type === 'smoking' ? SMOKING_MILESTONES : ALCOHOL_MILESTONES;
+    var match = null;
+    list.forEach(function(m) { if (streak >= m.days) match = m; });
+    return match ? match.text : null;
+  }
+
+  function renderHabitGrid(type, gridId, bannerId) {
+    var grid = document.getElementById(gridId);
+    var dates = getWeekDates();
+    var todayKey = dateKey();
+    var store = state[type];
+    grid.innerHTML = dates.map(function(key, i) {
+      var val = store[key];
+      var isFuture = key > todayKey;
+      var cls = 'alcohol-toggle';
+      var icon = 'ti-minus';
+      if (isFuture) { cls += ' future'; }
+      else if (val === false) { cls += ' clean'; icon = 'ti-check'; }
+      else if (val === true) { cls += ' drank'; icon = (type === 'smoking' ? 'ti-cigarette' : 'ti-glass-full'); }
+      return '<div class="alcohol-day">' +
+        '<span class="alcohol-day-label">' + WEEKDAY_LABELS[i] + '</span>' +
+        '<button class="' + cls + '" ' + (isFuture ? '' : 'onclick="toggleHabit(\'' + type + '\',\'' + key + '\')"') + ' aria-label="' + key + '"><i class="ti ' + icon + '" aria-hidden="true"></i></button>' +
+      '</div>';
+    }).join('');
+
+    var streak = getCurrentCleanStreak(type);
+    var bannerWrap = document.getElementById(bannerId);
+    var milestone = getMilestoneText(type, streak);
+    if (milestone) {
+      bannerWrap.innerHTML = '<div class="streak-banner"><i class="ti ti-trophy" aria-hidden="true"></i>' + milestone + '</div>';
+    } else if (streak > 0) {
+      var noun = type === 'smoking' ? 'rookvrij' : 'alcoholvrij';
+      bannerWrap.innerHTML = '<div class="streak-banner"><i class="ti ti-flame" aria-hidden="true"></i>' +
+        streak + ' dag' + (streak > 1 ? 'en' : '') + ' op rij ' + noun + '.</div>';
+    } else {
+      bannerWrap.innerHTML = '';
+    }
+  }
+
+  function renderAlcohol() { renderHabitGrid('alcohol', 'alcohol-grid', 'alcohol-banner-wrap'); }
+  function renderSmoking() { renderHabitGrid('smoking', 'smoking-grid', 'smoking-banner-wrap'); }
+
+  var today = new Date();
+  document.getElementById('today-label').textContent =
+    today.toLocaleDateString('nl-BE', { weekday: 'long', day: 'numeric', month: 'long' });
+
+  render();
+  renderHistory();
+  renderActivities();
+  renderWeight();
+  renderAlcohol();
+  renderSmoking();
+</script>
+
+
+</body></html>
